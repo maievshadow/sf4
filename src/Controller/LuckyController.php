@@ -20,11 +20,7 @@ class LuckyController extends Controller
      */
     public function number():Response
     {
-        $number = mt_rand(0, 20);
-
-        return new Response(
-            '<html><body>Lucky number: '.$number.'</body></html>'
-        );
+        throw new \Exception('1223');
     }
 
     /**

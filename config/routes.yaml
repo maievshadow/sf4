@@ -4,6 +4,6 @@
 #app_lucky_number:
 #    path: /lucky/number
 #    controller: App\Controller\LuckyController::number
-xx:
-    path: /lucky/xxAction
-    controller: App\Controller\LuckyController::xxAction
+#xx:
+#    path: /lucky/xxAction
+#    controller: App\Controller\LuckyController::xxAction
