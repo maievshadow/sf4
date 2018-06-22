@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Psr\Log\LoggerInterface;
 use App\Service\MessageGenerator;
 
-class LuckyController extends Controller
+class LuckyController extends Controller implements TokenAuthenticatedController
 {
     /**
      * @Route("/lucky/number")
@@ -55,12 +55,11 @@ class LuckyController extends Controller
     }
 
     /**
-     * @Route("/lucky/xx", name="lucky_xx")
+     * @Route("/lucky/bar")
      */
-    public function xxAction(LoggerInterface $logger){
-
-        throw $this->createNotFoundException('The product does not exist');
-        $logger->info('We are logging!');
-        return $this->redirect('http://symfony.com/doc');
+    // An action that needs authentication
+    public function bar()
+    {
+        return new Response('<h1>hello world</h1>');
     }
 }

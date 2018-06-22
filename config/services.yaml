@@ -1,6 +1,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    tokens:
+          client1: pass1
+          client2: pass2
 
 services:
     # default configuration for services in *this* file
@@ -28,7 +31,13 @@ services:
     App\EventListener\MaievExceptionListener:
             tags:
                 - { name: kernel.event_listener, event: kernel.exception }
-    App\EventListener\MaievControllerListener:
+#    App\EventListener\MaievControllerListener:
+#            tags:
+#                - { name: kernel.event_listener, event: kernel.controller }
+    App\EventListener\TokenSubscriber:
+            arguments:
+                $tokens: '%tokens%'
             tags:
                 - { name: kernel.event_listener, event: kernel.controller }
+
 

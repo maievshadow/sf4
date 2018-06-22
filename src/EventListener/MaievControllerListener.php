@@ -19,8 +19,10 @@ class MaievControllerListener
 
         // the controller can be changed to any PHP callable
 
-        $event->setController(function(){
-            return new Response("123");
+        $event->setController(function()use($event){
+            $request = $event->getRequest();
+            $request->getPathInfo();
+            return new Response("123".$request->getPathInfo().$request->getPassword());
         });
 
         echo '1';

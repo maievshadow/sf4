@@ -15,14 +15,12 @@ use App\Service\MessageGenerator;
 
 class Lucky2Controller extends Controller
 {
+
     /**
-     * @Route("/lucky2/number")
+     * @Route("/lucky2/bar")
      */
-    public function number():Response
+    public function bar()
     {
-        $number = mt_rand(0, 20);
-        return new Response(
-            '<html><body>Lucky number: '.$number.'</body></html>'
-        );
+        return new Response('<h1>hello world</h1>');
     }
 }
