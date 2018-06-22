@@ -7,8 +7,11 @@
  */
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Psr\Log\LoggerInterface;
 use App\Service\MessageGenerator;
@@ -57,9 +60,58 @@ class LuckyController extends Controller implements TokenAuthenticatedController
     /**
      * @Route("/lucky/bar")
      */
-    // An action that needs authentication
-    public function bar()
+    public function bar(Request $request)
     {
-        return new Response('<h1>hello world</h1>');
+
+//        return $this->redirect("/lucky2/foo");
+//        return $this->redirectToRoute('homepage');
+
+        $response = new StreamedResponse();
+        $response->setCallback(function () {
+            var_dump('Hello World');
+            flush();
+            sleep(2);
+            var_dump('Hello World22');
+            flush();
+        });
+        return $response->send();
+
+
+        $request = Request::create('/lucky2/foo');
+
+        var_dump($request->getContent());
+//        $request = Request::createFromGlobals();
+
+        $response = new Response();
+        $response->setContent('hh');
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'application/json');
+
+//        $response = new Response(sprintf('Hello %s', htmlspecialchars($token, ENT_QUOTES, 'UTF-8')));
+
+        $response->setMaxAge(60);
+
+        return $response;
+    }
+
+    /**
+     * @Route("/lucky/file")
+     */
+    public function download()
+    {
+
+        $filename = '/Users/maievshabu/Desktop/log/a.txt';
+        $response = new BinaryFileResponse($filename);
+        return $response;
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/plain');
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $filename
+        );
+        
+        return $response;
+        // send the file contents and force the browser to download it
+        return $this->file($filename);
     }
 }
