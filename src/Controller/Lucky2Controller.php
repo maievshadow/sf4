@@ -58,18 +58,31 @@ class Lucky2Controller extends Controller
      * @Route("/lucky2/list/{id}", requirements={"id" = "\d+"}, defaults={"id" = 1})
      */
     public function list($id){
+        return new JsonResponse([1,2]);
+    }
+
+    /**
+     * @Route("/lucky2/query/{amount}", requirements={"amount" = "\d+"}, defaults={"amount" = 1})
+     */
+    public function query($amount){
+
         $activity = $this->getDoctrine()
             ->getRepository(Activity::class)
-            ->find($id);
-
+            ->findAllGreaterThanPrice2($amount);
         if (!$activity) {
             throw $this->createNotFoundException(
-                'No activity found for id '.$id
+                'No activity found '
             );
         }
 
+        $arr = [];
+
+        foreach($activity as $val){
+            array_push($arr, $val);
+        }
+
         return new JsonResponse(
-            $activity->getId()
+            $arr
         );
     }
 
