@@ -4,6 +4,13 @@ parameters:
     tokens:
           client1: pass1
           client2: pass2
+sensio_framework_extra:
+    router:      { annotations: true }
+    request:     { converters: true, auto_convert: true }
+    view:        { annotations: true }
+    cache:       { annotations: true }
+    security:    { annotations: true }
+    psr_message: { enabled: false }
 
 services:
     # default configuration for services in *this* file

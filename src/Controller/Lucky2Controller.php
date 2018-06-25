@@ -10,9 +10,11 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Psr\Log\LoggerInterface;
 use App\Service\MessageGenerator;
+use App\Entity\Activity;
 
 class Lucky2Controller extends Controller
 {
@@ -30,28 +32,44 @@ class Lucky2Controller extends Controller
      * @Route("/lucky2/foo")
      */
     public function foo(){
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $activity = new Activity();
+
+        $activity->setAmount("190");
+        $activity->setUid(100);
+        $activity->setUserName("maeiv");
+
+        // tell Doctrine you want to (eventually) save the Product (no queries yet)
+        $entityManager->persist($activity);
+
+        // actually executes the queries (i.e. the INSERT query)
+        $entityManager->flush();
+
         return new JsonResponse(
-            [
-                [
-                    'name' => 'maiev',
-                    'age' => 30,
-                    'phone' => [
-                        ['id' => 1, 'name' => 2],
-                        ['id' => 1, 'name' => 2],
-                        ['id' => 1, 'name' => 2]
-                    ]
-                ],
-                [
-                    'name' => 'maiev',
-                    'age' => 30,
-                    'phone' => [
-                        ['id' => 3, 'name' => 2],
-                        ['id' => 3, 'name' => 2],
-                        ['id' => 3, 'name' => 2],
-                        ['id' => 3, 'name' => 2]
-                    ]
-                ],
-            ]
+            $activity->getId()
+        );
+    }
+
+
+
+
+    /**
+     * @Route("/lucky2/list/{id}", requirements={"id" = "\d+"}, defaults={"id" = 1})
+     */
+    public function list($id){
+        $activity = $this->getDoctrine()
+            ->getRepository(Activity::class)
+            ->find($id);
+
+        if (!$activity) {
+            throw $this->createNotFoundException(
+                'No activity found for id '.$id
+            );
+        }
+
+        return new JsonResponse(
+            $activity->getId()
         );
     }
 
