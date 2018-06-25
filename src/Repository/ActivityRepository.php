@@ -31,7 +31,8 @@ class ActivityRepository extends ServiceEntityRepository
             ->andWhere('p.amount >= :amount')
             ->setParameter('amount', $amount)
             ->orderBy('p.amount', 'ASC')
-            ->getQuery();
+            ->getQuery()
+            ->getArrayResult();
 
         return $qb->execute();
 
