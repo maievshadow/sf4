@@ -7,6 +7,7 @@
  */
 namespace App\Controller;
 
+use Doctrine\DBAL\Driver\Connection;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,7 +69,7 @@ class Lucky2Controller extends Controller
 
         $activity = $this->getDoctrine()
             ->getRepository(Activity::class)
-            ->findAllGreaterThanPrice2($amount);
+            ->findAllGreaterThanPrice($amount);
         if (!$activity) {
             throw $this->createNotFoundException(
                 'No activity found '
@@ -96,5 +97,19 @@ class Lucky2Controller extends Controller
         $result = $soapClient->call('hello', array('name' => 'Scott'));
 
         return new Response($result);
+    }
+
+
+    /**
+     * @Route("/lucky2/connect", name="homepage")
+     */
+    public function xx(Connection $connection){
+
+        $arr = $connection->fetchAll("select * from t_maiev");
+
+        return new JsonResponse(
+            $arr
+        );
+
     }
 }
